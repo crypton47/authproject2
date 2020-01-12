@@ -5,9 +5,9 @@ Author : BATALI OUALID
 Date : 31 Octobre 2019
 Python version : Python 3.6.7
 ______________TP : Athentification using Hash function and symmetric encryption ____________
-				
-"""
 
+"""
+#import time
 import socket
 import os
 import sqlite3
@@ -60,13 +60,15 @@ email = data[1]
 message = data[2]
 pem_public = data[3]
 signature = data[4]
+timestamp = data[5]
 # public_key = load_pem_public_key(pem_public, backend=default_backend())
 
 #home/crypton/Desktop/dir/
-
+"""
 file = open("publickey.txt","a")
 file.write(pem_public)
 file.close()
+"""
 
 
 
@@ -77,6 +79,7 @@ with open("publickey.txt", "r") as key_file:
 print ('IOT Device ID : ', data[0])
 print ('EMAIL ADDRESS : ', data[1])
 print ('Message RECEIVED: ', data[2])
+print('Timestamp to prevent Replay attacks', data[5])
 print ('Signature: ', data[4])
 print ('Public Key of the the client device', data[3])
 
@@ -88,7 +91,7 @@ try:
     salt_length=padding.PSS.MAX_LENGTH),hashes.SHA256())
     print ("############ L'AUTHENTIFICATION EST VERIFIEE  #########")
 except:
-    print ("############ ECHEC DE L'AUTHENTIFICATION      #########")
+    print ("---------SIGNATURE VERIFICATION----> ECHEC")
 try:
     sqliteConnection = sqlite3.connect('devices.db')
     sqlite_create_table_query = '''CREATE TABLE clients (
@@ -112,8 +115,8 @@ finally:
 ######################## INSERTION DES DONNES DANS LA BD ######################
 print("[*]  INSERTION DES DONNES DANS LA BASE DE DONNE devices.db")
 insert(deviceID,email,message, pem_public)
-print("[*]   GENERATION D-UNE CLE DE SESSION PAR LE GNPA #####")
+print("[*]   GENERATION D'UNE CLE DE SESSION PAR LE GNPA #####")
 os.system('python3 gnpa.py')
-# print ("La clé secrète est : {}".format(genkey()))
+# print ("-->La clé secrète est : {}".format(genkey()))
 #server_socket.close()
 

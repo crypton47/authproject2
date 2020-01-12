@@ -12,6 +12,7 @@ Python version : Python 3.6.7
 """
 # REMARQUE IMPORTANTE : CA VA PAS MARCHER AVEC PYTHON2! 
 import os
+from spongent import SPONGENT
 def rule2bin(rule):
     rule = bin(rule)[2:].zfill(8)
     return rule
@@ -60,8 +61,12 @@ def genkey():
     output = present(state, numberIter)
     password = int.from_bytes(bytes(output), 'little')
     return password
-print ("La clé secrète est : {}".format(genkey()))
-
+va = genkey()
+val = hex(va)
+A = SPONGENT(n=256, c=256, r=16, R=140)
+valHahed = hash(val)
+print ("[---->]Le nombre generée par le GNPA  : {}".format(va))
+print("[---->]Le hash du nombre generée avec SPONGENT est : {}".format(valHahed))
 
 
 
